@@ -64,20 +64,20 @@ const CreateProjectModal: React.FC<Props> = ({ onClose, onProjectCreated }) => {
               required
               minLength={1}
               maxLength={10}
-              placeholder="Enter project title (1-10 chars)"
+              placeholder="Enter Project name"
             />
             <small>{formData.title.length}/10 characters</small>
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Description (optional)</label>
+            <label htmlFor="description">Description</label>
             <textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               maxLength={90}
               rows={3}
-              placeholder="Enter project description (up to 90 chars)"
+              placeholder="Enter description"
             />
             <small>{formData.description.length}/90 characters</small>
           </div>

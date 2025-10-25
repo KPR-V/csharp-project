@@ -34,17 +34,17 @@ const Login: React.FC = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Login to Project Manager</h2>
-        <form onSubmit={handleSubmit}>
+        <h2>Welcome Back</h2>
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email Address</label>
             <input
               type="email"
               id="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
             />
           </div>
 
@@ -62,14 +62,16 @@ const Login: React.FC = () => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" disabled={loading} className="btn-primary">
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
+          <div className="auth-actions">
+            <button type="submit" disabled={loading} className="btn-primary">
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </div>
         </form>
 
-        <p className="auth-link">
-          Don't have an account? <Link to="/register">Register here</Link>
-        </p>
+        <div className="auth-link">
+          New to Project Manager? <Link to="/register">Create an account</Link>
+        </div>
       </div>
     </div>
   );

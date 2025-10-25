@@ -60,8 +60,8 @@ const Register: React.FC = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Create Account</h2>
-        <form onSubmit={handleSubmit}>
+        <h2>Join Project Manager</h2>
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
@@ -72,19 +72,20 @@ const Register: React.FC = () => {
               required
               minLength={3}
               maxLength={50}
-              placeholder="Choose a username"
+              placeholder="Choose a unique username"
             />
+            <small>At least 3 characters</small>
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email Address</label>
             <input
               type="email"
               id="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
             />
           </div>
 
@@ -97,8 +98,9 @@ const Register: React.FC = () => {
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
               minLength={6}
-              placeholder="Choose a password (min 6 characters)"
+              placeholder="Create a secure password"
             />
+            <small>Minimum 6 characters</small>
           </div>
 
           <div className="form-group">
@@ -115,14 +117,16 @@ const Register: React.FC = () => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" disabled={loading} className="btn-primary">
-            {loading ? 'Creating Account...' : 'Register'}
-          </button>
+          <div className="auth-actions">
+            <button type="submit" disabled={loading} className="btn-primary">
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </div>
         </form>
 
-        <p className="auth-link">
-          Already have an account? <Link to="/login">Login here</Link>
-        </p>
+        <div className="auth-link">
+          Already have an account? <Link to="/login">Sign in instead</Link>
+        </div>
       </div>
     </div>
   );
