@@ -8,5 +8,6 @@ namespace MiniProjectManager.API.Services.Interfaces
         Task<TaskResponseDto> UpdateTask(Guid taskId, UpdateTaskDto updateDto, Guid userId);
         Task DeleteTask(Guid taskId, Guid userId);
         Task<IEnumerable<TaskResponseDto>> GetProjectTasks(Guid projectId, Guid userId);
+        Task<IEnumerable<TaskResponseDto>> GetAllUserTasks(Guid userId);
     }
 }

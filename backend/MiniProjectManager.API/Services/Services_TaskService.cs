@@ -110,6 +110,17 @@ namespace MiniProjectManager.API.Services
             return tasks.Select(MapToDto);
         }
 
+        public async Task<IEnumerable<TaskResponseDto>> GetAllUserTasks(Guid userId)
+        {
+            var tasks = await _context.Tasks
+                .Include(t => t.Project)
+                .Where(t => t.Project.UserId == userId)
+                .OrderBy(t => t.CreatedAt)
+                .ToListAsync();
+
+            return tasks.Select(MapToDto);
+        }
+
         private static TaskResponseDto MapToDto(TaskItem task)
         {
             return new TaskResponseDto

@@ -70,6 +70,38 @@ namespace MiniProjectManager.API.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        [HttpGet("tasks")]
+        public async Task<ActionResult<IEnumerable<TaskResponseDto>>> GetAllTasks()
+        {
+            try
+            {
+                var userId = GetUserId();
+                var tasks = await _taskService.GetAllUserTasks(userId);
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("tasks")]
+        public async Task<ActionResult<TaskResponseDto>> CreateTaskWithoutProject([FromBody] CreateTaskDto createDto)
+        {
+            try
+            {
+                var userId = GetUserId();
+                // This would require a default project or a way to create tasks without projects
+                // For now, return a BadRequest suggesting to use the project-specific endpoint
+                return BadRequest(new { message = "Please use POST /api/projects/{projectId}/tasks to create tasks within a project context." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpGet("projects/{projectId}/tasks")]
         public async Task<ActionResult<IEnumerable<TaskResponseDto>>> GetProjectTasks(Guid projectId)
         {
