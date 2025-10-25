@@ -1,5 +1,5 @@
 import api from './services_api';
-import { Task, CreateTaskDto, UpdateTaskDto } from '../types/types_task.types';
+import { Task, CreateTaskDto, UpdateTaskDto, ScheduleRequestDto, ScheduleResponseDto } from '../types/types_task.types';
 
 export const taskService = {
   async getProjectTasks(projectId: string): Promise<Task[]> {
@@ -18,5 +18,10 @@ export const taskService = {
 
   async deleteTask(taskId: string): Promise<void> {
     await api.delete(`/tasks/${taskId}`);
+  },
+
+  async scheduleProjectTasks(projectId: string, request: ScheduleRequestDto): Promise<ScheduleResponseDto> {
+    const response = await api.post<ScheduleResponseDto>(`/projects/${projectId}/schedule`, request);
+    return response.data;
   },
 };

@@ -4,15 +4,18 @@ import { Task } from '../../types/types_task.types';
 
 interface Props {
   projectId: string;
+  existingTasks: Task[];
   onClose: () => void;
   onTaskCreated: (task: Task) => void;
 }
 
-const CreateTaskModal: React.FC<Props> = ({ projectId, onClose, onTaskCreated }) => {
+const CreateTaskModal: React.FC<Props> = ({ projectId, existingTasks, onClose, onTaskCreated }) => {
   const [formData, setFormData] = useState({
     title: '',
     dueDate: '',
     isCompleted: false,
+    estimatedHours: '8',
+    dependencies: [] as string[],
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,6 +36,8 @@ const CreateTaskModal: React.FC<Props> = ({ projectId, onClose, onTaskCreated })
         title: formData.title.trim(),
         dueDate: formData.dueDate || undefined,
         isCompleted: formData.isCompleted,
+        estimatedHours: formData.estimatedHours ? parseInt(formData.estimatedHours) : 8,
+        dependencies: formData.dependencies.length > 0 ? formData.dependencies : [''],
       });
       onTaskCreated(task);
     } catch (err: any) {
@@ -76,6 +81,43 @@ const CreateTaskModal: React.FC<Props> = ({ projectId, onClose, onTaskCreated })
               value={formData.dueDate}
               onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="estimatedHours">Estimated Hours (optional)</label>
+            <input
+              type="number"
+              id="estimatedHours"
+              value={formData.estimatedHours}
+              onChange={(e) => setFormData({ ...formData, estimatedHours: e.target.value })}
+              min="1"
+              max="1000"
+              placeholder="e.g., 8"
+            />
+            <small>Used for smart scheduling</small>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="dependencies">Dependencies (optional)</label>
+            <select
+              id="dependencies"
+              multiple
+              value={formData.dependencies}
+              onChange={(e) => {
+                const selected = Array.from(e.target.selectedOptions, (option) => option.value);
+                setFormData({ ...formData, dependencies: selected });
+              }}
+              style={{ minHeight: '100px' }}
+            >
+              {existingTasks
+                .filter((t) => !t.isCompleted)
+                .map((task) => (
+                  <option key={task.id} value={task.title}>
+                    {task.title}
+                  </option>
+                ))}
+            </select>
+            <small>Hold Ctrl/Cmd to select multiple tasks that must be completed first</small>
           </div>
 
           <div className="form-group checkbox-group">

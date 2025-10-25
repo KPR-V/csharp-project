@@ -2,13 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MiniProjectManager.API.Models
 {
-    public class ProjectTask
+    public class TaskItem
     {
         public Guid Id { get; set; }
 
         [Required]
         [StringLength(200)]
-        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         public DateTime? DueDate { get; set; }
 

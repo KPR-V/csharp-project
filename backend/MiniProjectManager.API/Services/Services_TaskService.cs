@@ -26,10 +26,10 @@ namespace MiniProjectManager.API.Services
                 throw new Exception("Project not found");
             }
 
-            var task = new ProjectTask
+            var task = new TaskItem
             {
                 Id = Guid.NewGuid(),
-                Title = createDto.Title,
+                Description = createDto.Title,
                 DueDate = createDto.DueDate,
                 IsCompleted = createDto.IsCompleted,
                 ProjectId = projectId,
@@ -57,7 +57,7 @@ namespace MiniProjectManager.API.Services
             // Update only provided fields
             if (!string.IsNullOrWhiteSpace(updateDto.Title))
             {
-                task.Title = updateDto.Title;
+                task.Description = updateDto.Title;
             }
 
             if (updateDto.DueDate.HasValue)
@@ -110,12 +110,12 @@ namespace MiniProjectManager.API.Services
             return tasks.Select(MapToDto);
         }
 
-        private static TaskResponseDto MapToDto(ProjectTask task)
+        private static TaskResponseDto MapToDto(TaskItem task)
         {
             return new TaskResponseDto
             {
                 Id = task.Id,
-                Title = task.Title,
+                Title = task.Description,
                 DueDate = task.DueDate,
                 IsCompleted = task.IsCompleted,
                 ProjectId = task.ProjectId,

@@ -6,6 +6,7 @@ import { Project } from '../../types/types_project.types';
 import { Task } from '../../types/types_task.types';
 import TaskList from './components_ProjectDetails_TaskList';
 import CreateTaskModal from './components_ProjectDetails_CreateTaskModal';
+import SmartSchedulerModal from './components_ProjectDetails_SmartSchedulerModal';
 import './components_ProjectDetails_ProjectDetails.css';
 
 const ProjectDetails: React.FC = () => {
@@ -16,6 +17,7 @@ const ProjectDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showSchedulerModal, setShowSchedulerModal] = useState(false);
 
   useEffect(() => {
     loadProjectDetails();
@@ -33,7 +35,7 @@ const ProjectDetails: React.FC = () => {
       // Load tasks separately (you can modify backend to include tasks in project details)
       const tasksData = await taskService.getProjectTasks(id);
       setTasks(tasksData);
-    } catch (err:any) {
+    } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load project');
       console.error(err);
     } finally {
@@ -98,9 +100,19 @@ const ProjectDetails: React.FC = () => {
       <main className="project-content">
         <div className="tasks-header">
           <h2>Tasks ({tasks.length})</h2>
-          <button onClick={() => setShowCreateModal(true)} className="btn-primary">
-            + Add Task
-          </button>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button
+              onClick={() => setShowSchedulerModal(true)}
+              className="btn-secondary"
+              disabled={tasks.filter((t) => !t.isCompleted).length === 0}
+              title="Generate optimal task order"
+            >
+              Smart Schedule
+            </button>
+            <button onClick={() => setShowCreateModal(true)} className="btn-primary">
+              + Add Task
+            </button>
+          </div>
         </div>
 
         <TaskList
@@ -113,8 +125,17 @@ const ProjectDetails: React.FC = () => {
       {showCreateModal && (
         <CreateTaskModal
           projectId={id!}
+          existingTasks={tasks}
           onClose={() => setShowCreateModal(false)}
           onTaskCreated={handleTaskCreated}
+        />
+      )}
+
+      {showSchedulerModal && (
+        <SmartSchedulerModal
+          projectId={id!}
+          tasks={tasks}
+          onClose={() => setShowSchedulerModal(false)}
         />
       )}
     </div>

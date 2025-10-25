@@ -74,6 +74,14 @@ const TaskItem: React.FC<Props> = ({ task, onUpdate, onDelete }) => {
             {isOverdue && '⚠️ '}
             {formatDate(task.dueDate)}
           </span>
+          {task.estimatedHours && (
+            <span className="task-hours">⏱️ {task.estimatedHours}h</span>
+          )}
+          {task.dependencies && task.dependencies.length > 0 && (
+            <span className="task-dependencies" title={task.dependencies.join(', ')}>
+              🔗 {task.dependencies.length} {task.dependencies.length === 1 ? 'dependency' : 'dependencies'}
+            </span>
+          )}
         </div>
       </div>
 

@@ -19,6 +19,6 @@ namespace MiniProjectManager.API.Models
 
         // Navigation properties
         public User User { get; set; } = null!;
-        public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
+        public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
     }
 }

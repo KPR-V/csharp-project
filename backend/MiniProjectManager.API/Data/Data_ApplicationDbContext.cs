@@ -12,7 +12,7 @@ namespace MiniProjectManager.API.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<ProjectTask> Tasks { get; set; }
+        public DbSet<TaskItem> Tasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,7 @@ namespace MiniProjectManager.API.Data
             });
 
             // Task configuration
-            modelBuilder.Entity<ProjectTask>(entity =>
+            modelBuilder.Entity<TaskItem>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.Project)

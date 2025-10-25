@@ -12,10 +12,12 @@ namespace MiniProjectManager.API.Controllers
     public class TasksController : ControllerBase
     {
         private readonly ITaskService _taskService;
+        private readonly ISchedulerService _schedulerService;
 
-        public TasksController(ITaskService taskService)
+        public TasksController(ITaskService taskService, ISchedulerService schedulerService)
         {
             _taskService = taskService;
+            _schedulerService = schedulerService;
         }
 
         private Guid GetUserId()
@@ -69,19 +71,43 @@ namespace MiniProjectManager.API.Controllers
             }
         }
         [HttpGet("projects/{projectId}/tasks")]
-public async Task<ActionResult<IEnumerable<TaskResponseDto>>> GetProjectTasks(Guid projectId)
-{
-    try
-    {
-        var userId = GetUserId();
-        var tasks = await _taskService.GetProjectTasks(projectId, userId);
-        return Ok(tasks);
-    }
-    catch (Exception ex)
-    {
-        return NotFound(new { message = ex.Message });
-    }
-}
+        public async Task<ActionResult<IEnumerable<TaskResponseDto>>> GetProjectTasks(Guid projectId)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var tasks = await _taskService.GetProjectTasks(projectId, userId);
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("projects/{projectId}/schedule")]
+        public ActionResult<ScheduleResponseDto> ScheduleProject(Guid projectId, [FromBody] ScheduleRequestDto request)
+        {
+            try
+            {
+                var userId = GetUserId();
+                // Note: You could add authorization check here to verify user owns the project
+                var schedule = _schedulerService.ScheduleTasks(request);
+                return Ok(schedule);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
     }
 }
